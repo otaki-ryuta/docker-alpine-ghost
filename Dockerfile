@@ -22,9 +22,12 @@ WORKDIR $GHOST_SOURCE
 
 ENV GHOST_VERSION 0.7.6
 
+COPY express.patch .
+
 RUN buildDeps=' \
 		gcc \
 		make \
+    patch \
 		python \
 		unzip \
 	' \
@@ -33,6 +36,7 @@ RUN buildDeps=' \
 	&& curl -sSL "https://ghost.org/archives/ghost-${GHOST_VERSION}.zip" -o ghost.zip \
 	&& unzip ghost.zip \
 	&& npm install --production \
+  && patch -p 1 < express.patch \
 	&& apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false $buildDeps \
 	&& rm ghost.zip \
 	&& npm cache clean \
