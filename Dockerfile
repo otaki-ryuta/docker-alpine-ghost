@@ -1,4 +1,4 @@
-FROM takipone/alpine-gosu-node:latest
+FROM takipone/armhf-alpine-gosu-node:latest
 
 RUN adduser -h /home/user -D user
 
@@ -7,9 +7,9 @@ WORKDIR $GHOST_SOURCE
 
 ENV GHOST_VERSION 0.7.6
 
-COPY express.patch .
+COPY express.patch ./express.patch
 
-RUN apk --update add --virtual build-dependencies curl gcc make patch python unzip \
+RUN apk --update add --virtual build-dependencies curl gcc g++ musl-dev make patch python unzip \
 	&& set -x \
 	&& curl -sSL "https://ghost.org/archives/ghost-${GHOST_VERSION}.zip" -o ghost.zip \
 	&& unzip ghost.zip \
